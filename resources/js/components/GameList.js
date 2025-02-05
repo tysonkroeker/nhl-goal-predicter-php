@@ -1,0 +1,36 @@
+// resources/js/components/GameList.js
+
+import React, { useState } from "react";
+import ReactDOM from 'react-dom';
+import GameRow from './GameRow';
+
+export default function GameList() {
+
+    const [games, setGames] = useState(null);
+
+    let d = new Date();
+    let formattedDate = d.toLocaleDateString("en-ca", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+    
+    if(games === null) {
+        fetch("http://localhost:8000/api/schedule/"  + formattedDate, {mode: 'no-cors'})
+        .then(data => {
+            return data.json();
+        })
+        .then(data => {
+            setGames(data);
+        });
+    }
+
+  return (
+    <div>
+        <div className="title m-b-md">NHL Player Stats</div>
+        {games && games.map((game) => {
+            return <GameRow key={game.id} game={game} />
+        })}
+    </div>
+  );
+}

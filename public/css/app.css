@@ -1,0 +1,11 @@
+.gameRow {
+  display: inline-block;
+}
+
+.away.playerList {
+  float: left;
+}
+
+.home.playerList {
+  float: right;
+}
