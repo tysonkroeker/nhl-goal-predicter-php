@@ -1,0 +1,20 @@
+.gameRow {
+    
+}
+
+
+.playerLists {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    width:500px;
+}
+
+.away.playerList {
+    width:300px;
+    text-align:left;
+}
+
+.home.playerList {
+    width:300px;
+    text-align:left;
+}

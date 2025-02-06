@@ -25,7 +25,6 @@
             }
 
             .flex-center {
-                align-items: center;
                 display: flex;
                 justify-content: center;
             }
@@ -38,10 +37,6 @@
                 position: absolute;
                 right: 10px;
                 top: 18px;
-            }
-
-            .content {
-                text-align: center;
             }
 
             .title {
@@ -73,23 +68,6 @@
                 <div id='nhl-app'></div>
             </div>
         </div>
-
-        <script>
-            let coll = document.getElementsByClassName('collabsibleTrigger');
-            for (i = 0; i < coll.length; i++) {
-                coll[i].addEventListener("click", function() {
-                    this.classList.toggle("active");
-                    var content = document.getElementsByClassName(this.dataset.team + 'Players')[0];
-                    if (content.style.display === "block") {
-                        content.style.display = "none";
-                        this.innerText = '+';
-                    } else {
-                        content.style.display = "block";
-                        this.innerText = '-';
-                    }
-                });
-            }
-        </script>
 
         <script src="{{ asset('js/app.js') }}" defer></script>
     </body>

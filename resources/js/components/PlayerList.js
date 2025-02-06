@@ -1,15 +1,14 @@
 // resources/js/components/PlayerList.js
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Player from './Player';
 
 export default function PlayerList(data) {
-    console.log(data);
-
     const [players, setPlayers] = useState(null);
+    const [playerName, setPlayerName] = useState('');
     
     if(players === null) {
-        fetch("http://localhost:8000/api/club-stats/" + data.teamId, {mode: 'no-cors'})
+        fetch("http://localhost:8000/api/club-stats/" + data.team.abbrev, {mode: 'no-cors'})
         .then(data => {
             return data.json();
         })
@@ -18,11 +17,29 @@ export default function PlayerList(data) {
         });
     }
 
+    function getName(player) {
+        return player.firstName.default + ' ' + player.lastName.default;
+    }
+
+    function nameUpdated(event) {
+        setPlayerName(event.target.value);
+    }
+
   return (
     <div>
-        <div>Player List</div>
+        <div>{data.team.placeName.default} {data.team.commonName.default}</div>
+        <div>
+            <input onChange={nameUpdated} />
+        </div>
         {players && players.map((player) => {
-            return <Player key={player.playerId} player={player} />
+            let name = getName(player);
+            if(playerName != '' && name.indexOf(playerName) !== -1) {
+                console.log("filtering", playerName, name, name.indexOf(playerName), player);
+                return <Player key={player.playerId} player={player} />
+            } else if (playerName === '') {
+                console.log("no filtering");
+                return <Player key={player.playerId} player={player} />
+            }
         })}
     </div>
   );
