@@ -1,7 +1,6 @@
 require('./bootstrap');
 
 import {createRoot} from 'react-dom/client';
-import ReactDOM from 'react-dom';
 
 import GameList from './components/GameList';
 

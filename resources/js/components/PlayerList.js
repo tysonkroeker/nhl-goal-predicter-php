@@ -13,7 +13,7 @@ export default function PlayerList(data) {
             return data.json();
         })
         .then(data => {
-            setPlayers(data.skaters);
+            setPlayers(calculateStats(data.skaters));
         });
     }
 
@@ -25,6 +25,18 @@ export default function PlayerList(data) {
         setPlayerName(event.target.value);
     }
 
+    function calculateStats(skaters) {
+        skaters.map((skater) => {
+            skater.goalsPerGame = (skater.goals / skater.gamesPlayed).toFixed(3);
+            return skater;
+        });
+        return skaters.sort(comparePlayers);
+    }
+
+    function comparePlayers(playerOne, playerTwo) {
+        return playerTwo.goalsPerGame - playerOne.goalsPerGame;
+    }
+
   return (
     <div>
         <div>{data.team.placeName.default} {data.team.commonName.default}</div>
@@ -34,10 +46,8 @@ export default function PlayerList(data) {
         {players && players.map((player) => {
             let name = getName(player);
             if(playerName != '' && name.indexOf(playerName) !== -1) {
-                console.log("filtering", playerName, name, name.indexOf(playerName), player);
                 return <Player key={player.playerId} player={player} />
-            } else if (playerName === '') {
-                console.log("no filtering");
+            } else if (playerName === '' || playerName === undefined) {
                 return <Player key={player.playerId} player={player} />
             }
         })}
