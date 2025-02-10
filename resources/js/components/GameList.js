@@ -1,11 +1,11 @@
 // resources/js/components/GameList.js
 
 import React, { useState } from "react";
-import ReactDOM from 'react-dom';
 import GameRow from './GameRow';
 
 export default function GameList(props) {
     const [games, setGames] = useState(null);
+    const [hasGames, setHasGames] = useState(false);
 
     let d = new Date();
     let formattedDate = d.toLocaleDateString("en-ca", {
@@ -21,6 +21,7 @@ export default function GameList(props) {
         })
         .then(data => {
             setGames(data);
+            setHasGames(data.length > 0);
         });
     }
 
@@ -30,6 +31,7 @@ export default function GameList(props) {
         {games && games.map((game) => {
             return <GameRow key={game.id} game={game} />
         })}
+        {!hasGames && <div>No Games</div>}
     </div>
   );
 }

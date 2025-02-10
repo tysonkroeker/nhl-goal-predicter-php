@@ -41,7 +41,7 @@ export default function PlayerList(data) {
     <div>
         <div>{data.team.placeName.default} {data.team.commonName.default}</div>
         <div>
-            <input onChange={nameUpdated} />
+            <input onChange={nameUpdated} value='' />
         </div>
         {players && players.map((player) => {
             let name = getName(player);
