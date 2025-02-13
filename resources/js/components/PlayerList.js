@@ -1,28 +1,55 @@
 // resources/js/components/PlayerList.js
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Player from './Player';
 
 export default function PlayerList(data) {
-    console.log(data);
-
     const [players, setPlayers] = useState(null);
+    const [playerName, setPlayerName] = useState('');
     
     if(players === null) {
-        fetch("http://localhost:8000/api/club-stats/" + data.teamId, {mode: 'no-cors'})
+        fetch("http://localhost:8000/api/club-stats/" + data.team.abbrev, {mode: 'no-cors'})
         .then(data => {
             return data.json();
         })
         .then(data => {
-            setPlayers(data.skaters);
+            setPlayers(calculateStats(data.skaters));
         });
+    }
+
+    function getName(player) {
+        return player.firstName.default + ' ' + player.lastName.default;
+    }
+
+    function nameUpdated(event) {
+        setPlayerName(event.target.value);
+    }
+
+    function calculateStats(skaters) {
+        skaters.map((skater) => {
+            skater.goalsPerGame = (skater.goals / skater.gamesPlayed).toFixed(3);
+            return skater;
+        });
+        return skaters.sort(comparePlayers);
+    }
+
+    function comparePlayers(playerOne, playerTwo) {
+        return playerTwo.goalsPerGame - playerOne.goalsPerGame;
     }
 
   return (
     <div>
-        <div>Player List</div>
+        <div>{data.team.placeName.default} {data.team.commonName.default}</div>
+        <div>
+            <input onChange={nameUpdated} value='' />
+        </div>
         {players && players.map((player) => {
-            return <Player key={player.playerId} player={player} />
+            let name = getName(player);
+            if(playerName != '' && name.indexOf(playerName) !== -1) {
+                return <Player key={player.playerId} player={player} />
+            } else if (playerName === '' || playerName === undefined) {
+                return <Player key={player.playerId} player={player} />
+            }
         })}
     </div>
   );
